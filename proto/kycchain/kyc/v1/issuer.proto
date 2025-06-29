@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package kycchain.kyc.v1;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "vnic/x/kyc/types";
+
+// Issuer represents a registered KYC issuer
+message Issuer {
+  // address is the cosmos address of the issuer
+  string address = 1;
+  
+  // name is the human-readable name of the issuer
+  string name = 2;
+  
+  // public_key is the public key used for signing verifiable credentials
+  string public_key = 3;
+  
+  // max_kyc_level is the maximum KYC level this issuer can grant
+  int32 max_kyc_level = 4;
+  
+  // active indicates if the issuer is currently active
+  bool active = 5;
+  
+  // metadata contains additional issuer information
+  map<string, string> metadata = 6 [(gogoproto.nullable) = false];
+}

@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+package kycchain.kyc.v1;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "kycchain/kyc/v1/params.proto";
+import "kycchain/kyc/v1/issuer.proto";
+
+option go_package = "vnic/x/kyc/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/kycchain/kyc/v1/params";
+  }
+
+  // Queries an identity by id.
+  rpc Identity(QueryIdentityRequest) returns (QueryIdentityResponse) {
+    option (google.api.http).get = "/kycchain/kyc/v1/identity/{id}";
+  }
+
+  // Queries KYC level for an address.
+  rpc KycLevel(QueryKycLevelRequest) returns (QueryKycLevelResponse) {
+    option (google.api.http).get = "/kycchain/kyc/v1/kyc_level/{address}";
+  }
+
+  // Queries an issuer by address.
+  rpc Issuer(QueryIssuerRequest) returns (QueryIssuerResponse) {
+    option (google.api.http).get = "/kycchain/kyc/v1/issuer/{address}";
+  }
+
+  // Queries all issuers.
+  rpc Issuers(QueryIssuersRequest) returns (QueryIssuersResponse) {
+    option (google.api.http).get = "/kycchain/kyc/v1/issuers";
+  }
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryIdentityRequest is request type for the Query/Identity RPC method.
+message QueryIdentityRequest {
+  string id = 1;
+}
+
+// QueryIdentityResponse is response type for the Query/Identity RPC method.
+message QueryIdentityResponse {
+  string id = 1;
+  string state = 2;
+  int32 kyc_level = 3;
+  map<string, string> attributes = 4;
+  string claims_root = 5;
+  string rev_root = 6;
+  string roots_root = 7;
+}
+
+// QueryKycLevelRequest is request type for the Query/KycLevel RPC method.
+message QueryKycLevelRequest {
+  string address = 1;
+}
+
+// QueryKycLevelResponse is response type for the Query/KycLevel RPC method.
+message QueryKycLevelResponse {
+  int32 level = 1;
+}
+
+// QueryIssuerRequest is request type for the Query/Issuer RPC method.
+message QueryIssuerRequest {
+  string address = 1;
+}
+
+// QueryIssuerResponse is response type for the Query/Issuer RPC method.
+message QueryIssuerResponse {
+  Issuer issuer = 1;
+}
+
+// QueryIssuersRequest is request type for the Query/Issuers RPC method.
+message QueryIssuersRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryIssuersResponse is response type for the Query/Issuers RPC method.
+message QueryIssuersResponse {
+  repeated Issuer issuers = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}

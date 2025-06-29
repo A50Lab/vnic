@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package kycchain.kyc.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "vnic/x/kyc/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (amino.name) = "kyc/Params";
+}
